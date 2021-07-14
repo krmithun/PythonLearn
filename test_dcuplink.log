@@ -1,0 +1,10 @@
+2021-05-28 17:06:28,543 DEBUG A debug message
+2021-05-28 17:06:28,543 INFO An info message
+2021-05-28 17:06:28,543 WARNING Something is not right.
+2021-05-28 17:06:28,543 ERROR A Major error has happened.
+2021-05-28 17:06:28,543 CRITICAL Fatal error. Cannot continue
+2021-05-28 17:08:11,099 DEBUG A debug message
+2021-05-28 17:08:11,100 INFO An info message
+2021-05-28 17:08:11,100 WARNING Something is not right.
+2021-05-28 17:08:11,100 ERROR A Major error has happened.
+2021-05-28 17:08:11,100 CRITICAL Fatal error. Cannot continue
