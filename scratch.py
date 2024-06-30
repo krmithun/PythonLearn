@@ -3,6 +3,8 @@ Python learning
 https://www.w3schools.com/python/python_strings_modify.asp
 
 Run: pytest -sv scratch.py -k test_assert --pdb
+
+https://github.com/krmithun/PythonLearn/blob/main/scratch.py
 '''
 import fnmatch
 import re
@@ -2998,3 +3000,17 @@ Other important packages
         'urllib3<1.24,>=1.21.1',
         'uritemplate==0.6',
 """
+"""
+Remove the files related with git
+rm -rf .git
+
+Do the commit again
+git add . && git commit -m "your commit"
+
+Add the git URL and try to push again
+git remote add origin <your git URL>
+
+And then try to push again
+git push -u origin master -f
+
+Success!"""
