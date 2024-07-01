@@ -1296,9 +1296,19 @@ def test_assert_1():
     assert 10 > 20
 
 
-# except
-# try
-# finally
+"""
+>try
+>except
+>finally
+The try block lets you test a block of code for errors.
+
+The except block lets you handle the error.
+
+The else block lets you execute code when there is no error.
+
+The finally block lets you execute code, regardless of the result of the try- and except blocks.
+
+"""
 
 def test_except_1():
     try:
@@ -2015,13 +2025,18 @@ def test_os_cmd():
     print(output)
 
 
+"""
+>input
+Python 3.6 uses the input() method.
+
+Python 2.7 uses the raw_input() method.
+"""
 def test_input_1():
     # Python program showing
     # a use of input()
 
     val = input("Enter your value: ")
-    import pdb;
-    pdb.set_trace()
+    import pdb;pdb.set_trace()
     print(val)
 
 
@@ -2389,20 +2404,61 @@ def test_oops_polymorphism_inheritance():
     153.93804002589985
     """
 
+"""
+>open
+fp = open(filename, "r")
+complete_file = fp.read
+
+lines = fp.readlines() <read all lines 
+
+fp.readline <read 1 line at a time
+with open('example.txt', 'r') as file: opens the file in read mode. 
+The with statement ensures that the file is properly closed after its suite finishes, 
+even if an exception is raised.
+
+"""
 def test_file_1():
-    with open("hitrate.sh", "r") as fileobj:
-        # lines = fileobj.read()
-        lines = fileobj.readlines()
+    output = """
+            <HUAWEI> display interface brief | exclude 10GE|40GE
+        PHY: Physical
+        *down: administratively down
+        ^down: standby
+        (l): loopback
+        (s): spoofing
+        (b): BFD down
+        (e): EFM down
+        (d): Dampening Suppressed
+        (p): port alarm down
+        (dl): DLDP down
+        InUti/OutUti: input utility rate/output utility rate
+        Interface                   PHY   Protocol InUti OutUti   inErrors  outErrors
+        Eth-Trunk2                  down  down        0%     0%          0          0
+        Eth-Trunk27                 up    up       0.01%  0.01%          0          0
+        MEth0/0/0                   up    up       0.01%  0.01%          0          0
+        NULL0                       up    up(s)       0%     0%          0          0
+        Vlanif2                     down  down        --     --          0          0
+        Vlanif10                    down  down        --     --          0          0
+        Vlanif20                    down  down        --     --          0          0
+        Vlanif200                   up    up          --     --          0          0
+        """
 
-    # print(lines)
-    with open("hitrate.backup", 'w') as nfileobj:
-        for line in lines:
-            nfileobj.write(line)
+    with open ('sampledatafile.txt', 'w') as fp:
+        fp.write(output)
+        fp.close()
 
-    if os.system('sed -i "s/\'//g" hitrate.backup'):
-        print("same")
-    for line in lines:
-        print(line.rstrip())
+    with open("sampledatafile.txt", "r") as fileobj:
+        lines = fileobj.read()
+        print (lines)
+        fileobj.close()
+
+    # Open the file in read mode
+    with open('sampledatafile.txt', 'r') as file:
+        # Read the file line by line using a loop
+        while True:
+            line = file.readline()
+            if not line:
+                break  # End of file reached
+            print(line.strip())  # strip() removes the newline character
 
 
 def test_json():
@@ -2892,6 +2948,7 @@ r"""
 r"""
 re.findall
 re.search
+re.match
 re.split
 re.sub
 
@@ -3044,6 +3101,57 @@ def test_search_3():
     else:
         print("Did not find 'dog'")
 
+def test_search_4():
+    output = """
+     
+    Network Management Processor (ACTIVE NMP) Log:
+      Reset count:   6
+      Re-boot History:   May 26 1997 07:25:31 0, May 26 1997 01:55:07 3
+                         May 25 1997 14:54:32 3, May 25 1997 14:37:56 3
+                         May 25 1997 14:30:17 3, May 25 1997 08:52:11 3
+      Bootrom Checksum Failures:      0   UART Failures:                  0
+      Flash Checksum Failures:        0   Flash Program Failures:         0
+      Power Supply 1 Failures:        0   Power Supply 2 Failures:        0
+      DRAM Failures:                  0
+      Exceptions:                     0
+     
+    NVRAM log:
+     
+    01. 5/26/97,01:56:33: convert_post_SAC_CiscoMIB:Nvram block 0 size
+    mismatch: 340
+    88(33960)
+     
+    Module 3 Log:
+      Reset Count:   7
+      Reset History: Mon May 26 1997, 08:38:55
+                     Mon May 26 1997, 01:28:43
+                     Mon May 26 1997, 00:57:02
+                     Sun May 25 1997, 14:56:37
+     
+     
+    Module 4 Log:
+      Reset Count:   1
+      Reset History: Mon May 26 1997, 10:09:55
+     
+     
+    Module 5 Log:
+      Reset Count:   6
+      Reset History: Mon May 26 1997, 08:39:03
+                     Mon May 26 1997, 00:57:10
+                     Sun May 25 1997, 14:56:45
+                     Sun May 25 1997, 14:43:15
+     
+    Console>"""
+
+    nvrm_log = output.partition('NVRAM log:')[2]
+    print (nvrm_log)
+    nvrm = dict()
+    matched = re.findall(r'Module\s+(\d+)\s+Log:\n\s+Reset Count:\s+(\d+)', nvrm_log, re.DOTALL | re.MULTILINE)
+    if matched:
+        for m in matched:
+            nvrm[m[0]] = m[1]
+    print (nvrm.keys())
+    print (nvrm.items())
 
 r"""
 >findall
@@ -3307,6 +3415,9 @@ If the pattern exists, the match continues. If the pattern does not exist, the m
     # Log the matches
     print("Match object:", matches)  # Output: ['123', '456', '789']
 
+r"""
+>match
+"""
 def test_match_1():
     output_lines = [
         "eth0: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500",
@@ -3357,7 +3468,7 @@ def test_match_2():
     more text
     """
 
-    """
+    r"""
     ([^\)]*\)):
 
     Character Class: [^\)]
@@ -3394,11 +3505,52 @@ def test_match_multiline():
     without re.DOTALL just 1 line is fetched
     pkts bytes target prot opt in out source destination
     """
-    # matched = re.search(regex, output, re.MULTILINE | re.DOTALL)
     if matched:
         print (matched.group(1))
         if len(matched.group(1).splitlines()[1:]) >=2:
             print ("Found atleaset 2 firewall rules")
+
+r"""
+split
+re.split is particularly useful when you need more flexibility in how you 
+split strings based on patterns rather than fixed characters. 
+It allows you to handle complex splitting requirements that str.split() 
+might not support out of the box. Use it when you need to split strings in 
+a more sophisticated manner using regular expressions.
+
+"""
+def test_re_split_str():
+    import re
+
+    # Example data
+    checks = {'hgetall': "subnet12345value67890version1.0"}
+
+    # Constructing a regular expression pattern to match 'subnet', 'value', and 'version'
+    pattern = r'subnet|value|version'
+
+    # Splitting the string based on the pattern
+    hgetall_value = re.split(pattern, checks['hgetall'])
+
+    # Result
+    print(hgetall_value)
+
+
+
+r"""
+sub
+"""
+def test_re_sub_str():
+    import re
+
+    # Example string
+    steelhead_string = "Steelheads are fish."
+
+    # Replace "Steelheads" and strip whitespace characters
+    steelhead_string = re.sub(r'Steelheads', '', steelhead_string).strip(' \n\t\r')
+
+    print(steelhead_string)  # Output: "are fish."
+
+
 """
 >rest api
 """
