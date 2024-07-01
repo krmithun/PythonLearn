@@ -1519,7 +1519,9 @@ def test_func_arbitrary_arguments():
     func('arg1', 'arg2', 'arg3')
 
 
-'''If you do not know how many keyword arguments that will be passed into your function, 
+'''
+>kwargs
+If you do not know how many keyword arguments that will be passed into your function, 
 add two asterisk: ** before the parameter name in the function definition.
 
 This way the function will receive a dictionary of arguments, 
@@ -1622,6 +1624,24 @@ def test_function_kwargs():
                            location='paris', field='chemistry')
     print(user_0)
     print(user_1)
+
+# The get method of a dictionary returns the value for the specified key
+# if the key exists in the dictionary;
+# otherwise, it returns the default value provided as the second argument.
+def test_kwargs_default_value():
+    class FileHandler:
+        def __init__(self, **kwargs):
+            self._file_name = kwargs.get('file_name', 'myfile.txt')
+
+        def print_file_name(self):
+            print(f"The file name is: {self._file_name}")
+
+    # Usage examples
+    file_handler1 = FileHandler(file_name='customfile.txt')
+    file_handler1.print_file_name()  # Output: The file name is: customfile.txt
+
+    file_handler2 = FileHandler()
+    file_handler2.print_file_name()  # Output: The file name is: myfile.txt
 
 
 '''
@@ -2865,7 +2885,520 @@ def test_json_load_dump():
 #         self.args.log.error(ex)
 #         self.args.log.error(trace)
 
+r"""
+>raise
+"""
 
+r"""
+re.findall
+re.search
+re.split
+re.sub
+
+Function	Description
+findall	    Returns a list containing all matches
+search	    Returns a Match object if there is a match anywhere in the string
+split	    Returns a list where the string has been split at each match
+sub	        Replaces one or many matches with a string
+
+[]	A set of characters	"[a-m]"	
+\	Signals a special sequence (can also be used to escape special characters)	"\d"	
+.	Any character (except newline character)	"he..o"	
+^	Starts with	"^hello"	
+$	Ends with	"planet$"	
+*	Zero or more occurrences	"he.*o"	
++	One or more occurrences	"he.+o"	
+?	Zero or one occurrences	"he.?o"	
+{}	Exactly the specified number of occurrences	"he.{2}o"	
+|	Either or	"falls|stays"	
+()	Capture and group
+
+
+\A	Returns a match if the specified characters are at the beginning of the string	"\AThe"	
+\b	Returns a match where the specified characters are at the beginning or at the end of a word
+(the "r" in the beginning is making sure that the string is being treated as a "raw string")	r"\bain"
+
+r"ain\b"	
+
+\B	Returns a match where the specified characters are present, but NOT at the beginning (or at the end) of a word
+(the "r" in the beginning is making sure that the string is being treated as a "raw string")	r"\Bain"
+
+r"ain\B"	
+
+\d	Returns a match where the string contains digits (numbers from 0-9)	"\d"	
+\D	Returns a match where the string DOES NOT contain digits	"\D"	
+\s	Returns a match where the string contains a white space character	"\s"	
+\S	Returns a match where the string DOES NOT contain a white space character	"\S"	
+\w	Returns a match where the string contains any word characters (characters from a to Z, digits from 0-9, and the underscore _ character)	"\w"	
+\W	Returns a match where the string DOES NOT contain any word characters	"\W"	
+\Z	Returns a match if the specified characters are at the end of the string	"Spain\Z"
+
+[arn]	Returns a match where one of the specified characters (a, r, or n) is present	
+[a-n]	Returns a match for any lower case character, alphabetically between a and n	
+[^arn]	Returns a match for any character EXCEPT a, r, and n	
+[0123]	Returns a match where any of the specified digits (0, 1, 2, or 3) are present	
+[0-9]	Returns a match for any digit between 0 and 9	
+[0-5][0-9]	Returns a match for any two-digit numbers from 00 and 59	
+[a-zA-Z]	Returns a match for any character alphabetically between a and z, lower case OR upper case	
+[+]	In sets, +, *, ., |, (), $,{} has no special meaning, so [+] means: return a match for any + character in the string
+
+Commonly Used re Flags
+
+re.IGNORECASE (re.I):
+Description: Makes the pattern matching case-insensitive.
+Example: re.search(r'hello', text, re.IGNORECASE)
+
+
+re.MULTILINE (re.M):
+Description: Allows the ^ and $ anchors to match the start and end of each line, 
+not just the start and end of the entire string.
+Example: re.search(r'^start', text, re.MULTILINE)
+
+re.DOTALL (re.S):
+Description: Allows the dot (.) in the pattern to match any character, 
+including newline characters (\n).
+Example: re.search(r'.+', text, re.DOTALL)
+re.UNICODE (re.U):
+
+Description: Makes \w, \W, \b, \B, \d, \D, \s, and \S dependent on the Unicode character properties database.
+Example: re.findall(r'\w+', text, re.UNICODE)
+
+re.ASCII (re.A):
+Description: Causes \w, \W, \b, \B, \d, \D, \s, and \S to only match ASCII characters, and disables \w, \b, and \s completely.
+Example: re.findall(r'\w+', text, re.ASCII)
+
+re.VERBOSE (re.X):
+Description: Allows you to write regular expressions that are more readable 
+by ignoring whitespace and allowing comments (#).
+
+"""
+
+r"""
+>search
+
+When to use re.match and re.search?
+
+Usage: Use re.search when you want to find a pattern anywhere in the string.
+Behavior: It scans through the entire string and returns the first occurrence of the pattern.
+Example: If you want to find a specific substring or pattern within a larger string, regardless of its position.
+
+Usage: Use re.match when you want to match a pattern specifically at the beginning of the string.
+Behavior: It tries to match the pattern only at the beginning of the string. If the pattern is found anywhere else in the string, it returns None.
+Example: If you have a string and you want to check if it starts with a specific pattern or if you want to extract information from the very beginning of the string.
+
+"""
+def test_re_search_1():
+    output = """
+                Console> (enable) show cam agingtime
+                VLAN   1 aging time = 300 sec
+                VLAN   3 aging time = 300 sec
+                VLAN   5 aging time = 300 sec
+                VLAN   9 aging time = 300 sec
+                VLAN 100 aging time = 300 sec
+                VLAN 200 aging time = 300 sec
+                VLAN 201 aging time = 300 sec
+                VLAN 202 aging time = 300 sec
+                VLAN 203 aging time = 300 sec
+                Console> (enable) show config
+                """
+    for line in output.splitlines():
+        match = re.search(r'VLAN\s*(\d+)\saging time = (\d+) sec', output)
+        print ('VLAN = %s time = %s' % (match.group(1), match.group(2)))
+
+def test_re_search_2():
+    output1 = """
+    Console> (enable) show cdp neighbor 4
+Capability Codes: R - Router, T - Trans Bridge, B - Source Route Bridge
+                  S - Switch, H - Host, I - IGMP, r - Repeater
+Port    Device-ID               Port-ID           Platform            Capability
+------- ----------------------- ----------------- ------------------- ----------
+4/1     001905905               4/1               WS-C5000            T S
+4/1     062000101(CAT3)         9                 WS-C1201            S I
+4/1     069000022               8/1               WS-C5500            T S
+4/1     069000040               4/2               WS-C5500            T S
+Console> (enable)"""
+    m = re.search(r'(\d/\d)\s*\d+\(CAT3\)\s*(\d+)\s*(\w+-\w+)', output1)
+    # 4/1 9 WS-C1201
+    if m:
+        print (m.group(1), m.group(2), m.group(3))
+    else:
+        print ('No match')
+
+def test_search_3():
+    import re
+
+    text = "The quick brown fox jumps over the lazy dog"
+
+    # Search for 'fox' anywhere in the string
+    # match = re.match(r".*fox", text)
+    match = re.search(r"fox", text)
+    if match:
+        print("Found 'fox' at index:", match.start())
+    else:
+        print("Did not find 'fox'")
+
+    # Search for 'dog' anywhere in the string
+    match = re.search(r"dog", text)
+    if match:
+        print("Found 'dog' at index:", match.start())
+    else:
+        print("Did not find 'dog'")
+
+
+r"""
+>findall
+return re.findall("Address:\\s+(\\d+\\.\\d+\\.\\d+\\.\\d+)\\s*",
+                          output)[1]
+                          
+url = 'http://buildbox.lab.nbttech.com/api/bld/2.0/deliverables/' + deliverable + '/'
+resp = requests.get(url=url)
+data = json.loads(resp.text)
+int_array = re.findall(r'\d+', data["build"]["name"])
+print(str(int_array[-1]))
+
+            pattern = ("There are not enough AppUnits available "
+                       "to support the number of users")
+            if not(re.findall(pattern, res.text)):
+                raise VerificationError(
+                    expected="true",
+                    actual="Pattern not found in response text")  
+                    
+    #  The last sequence number from the
+    #  connection trace is the one which is newly created.
+    syn_dif_seq = re.findall(r'(?<=Syn#: )\d+', str(result))
+    assert (str(SYN_SAME_SEQ) not in syn_dif_seq[-1]), \
+        'Found same sequence number'  
+        
+        new_var = re.findall(r'id="\d{2,}"', var)
+        
+        header_blocks = re.findall(r'\S+\s+(?=\S|$)', header)
+        
+    result = cvm_shell.exec_command('journalctl --disk-usage')
+    mem = re.findall(r'\d.+M', result)
+    output = mem[0].split('M')
+    return float(output[0])
+"""
+def test_re_findall_1():
+    output = """
+            Console> (enable) show cdp neighbor 4 detail
+            Device-ID: 001905905
+            Device Addresses:
+              IP Address: 172.16.25.140
+            Holdtime: 168 sec
+            Capabilities: TRANSPARENT_BRIDGE SWITCH
+            Version:
+              WS-C5000 Software, Version McpSW: 2.2(4) NmpSW: 2.3(103-Eng)
+              Copyright (c) 1995,1996 by Cisco Systems
+            Platform: WS-C5000
+            Port-ID (Port on Device): 4/1
+            Port (Our Port): 4/1
+            ___________________________________________________________________________
+            Device-ID: 062000101(CAT3)
+            Device Addresses:
+              IP Address: 172.16.25.212
+            Holdtime: 175 sec
+            Capabilities: SWITCH IGMP
+            Version:
+              WS-C1201 Software, Version DmpSW: 4.26 NmpSW: 4.26
+              Copyright (c) 1994,1995 by Cisco Systems
+              DMP S/W compiled on Apr 18 1997 15:03:03
+              NMP S/W compiled on Apr 18 1997 14:52:51
+              System Bootstrap Version: 1.1
+              Hardware Version: 3.0  Model: WS-C1201  Serial #: 062000101
+              1 FDDI interface
+              8 10BaseT interfaces
+              4096K bytes of DRAM memory.
+              1024K bytes of NMP FLASH memory.
+              32K bytes of non-volatile configuration memory.
+              Uptime is 8 days, 22 hours, 25 minutes
+            Platform: WS-C1201
+            Port-ID (Port on Device): 9
+            Port (Our Port): 4/1
+            Console> (enable)"""
+
+    m = re.findall(r'IP Address: (\d+.\d+.\d+.\d+)', output)
+    print (m)
+
+def test_findall_2():
+    import re
+
+    # Simulating the result of the shell command
+    result = """Archived and active journals take up 4.0M in the file system.
+    Archived and active journals take up 5.0M in the file system."""
+
+    # Using the regular expression to find all matches
+    mem = re.findall(r'\d.+M', result)
+
+    # Printing the found matches
+    print(mem[1])
+
+def test_findall_3():
+    import re
+
+    # Sample data
+    data = '''
+    SteelConnect@17163 org-name="RVBD" site-name="SiteA" prefix="1234"
+    SteelConnect@17163 org-name="RVBD" site-name="SiteB" prefix="5678"
+    '''
+
+    # Variables
+    site_name = "SiteA"
+    prefix = "1234"
+
+    # Construct the regular expression pattern
+    pattern = (r'SteelConnect@17163 org-name="RVBD" site-name="'
+               + re.escape(site_name) + '" prefix="'
+               + re.escape(prefix) + '"')
+
+    # Find all matches
+    matches = re.findall(pattern, data)
+
+    # Print the matches
+    print(matches)
+
+def test_findall_4():
+    import re
+
+    def get_rsyslog_message_from_server(client_shell, msg):
+        # Placeholder for actual function that fetches message from server
+        return "Sample data with [structured data] in square brackets"
+
+    # Assuming client_shell and msg are defined
+    client_shell = None
+    msg = "Sample message"
+
+    data = ''
+    if data == '':
+        data = get_rsyslog_message_from_server(client_shell, msg)
+
+    # Split text into parts outside the square brackets
+    parts_text = re.split(r'\[.*\]', data)
+
+    # Find all substrings enclosed in square brackets
+    parts_bracket = re.findall(r'\[.*\]', data)
+
+    # Check that there are exactly two parts of text outside the square brackets
+    assert len(parts_text) == 2, 'Structured data in square brackets not found'
+
+    # Output for debugging
+    print("Parts outside brackets:", parts_text)
+    print("Parts inside brackets:", parts_bracket)
+
+def test_findall_5():
+    import re
+    import logging
+
+    # Initialize logger
+    logger = logging.getLogger()
+    logging.basicConfig(level=logging.INFO)
+
+    # Placeholder for actual command execution function
+    def exec_command(cmd):
+        # Simulated command output for demonstration
+        return """
+        ingress=12345 egress=67890
+        ingress=23456 egress=78901
+        ingress=34567 egress=89012
+        """
+
+    # Execute the command to get the flow rules
+    catfish_service_flow_rules = exec_command(
+        'orchestrator-agent --show_service_chain_flows_rules catfish-secure')
+
+    # Log the output for debugging
+    logger.info("catfish service chain flow rule:\n{}".format(catfish_service_flow_rules))
+
+    # Use regular expressions to extract flow rules
+    # Pattern: 'ingress=[digits] egress=[digits]'
+    flow_rules = set(re.findall(r'ingress=\d+\s+egress=\d+', catfish_service_flow_rules))
+
+    # Output the extracted flow rules for debugging
+    print("Extracted Flow Rules:", flow_rules)
+
+def test_findall_6():
+    import re
+
+    # Sample output containing sysdump files
+    output_sys_dump = """
+    Some log lines...
+    sysdump-cvm-2023-06-29-123456.tgz
+    Some more log lines...
+    sysdump-cvm-2023-06-30-234567.tgz
+    Even more log lines...
+    """
+
+    # Find all sysdump-cvm files
+    cvm_sys_dump_files = re.findall(r'sysdump-cvm.+\.tgz', output_sys_dump)
+
+    # Print the found files
+    print("Found sysdump-cvm files:", cvm_sys_dump_files)
+
+def test_findall_7():
+    # ?:
+    import re
+
+    # Placeholder for the command execution function
+    def exec_command(cmd):
+        # Simulated command output for demonstration
+        return """
+        OSPF Router with ID (1.1.1.1) (Process ID 1)
+
+        Router Link States (Area 0.0.0.0)
+
+        Link ID         ADV Router      Age         Seq#       Checksum Link count
+        2.2.2.2         1.1.1.1         1200        0x8000000b 0x00234d  3
+        3.3.3.3         1.1.1.1         1200        0x8000000b 0x00234d  3
+
+        AS External Link States
+
+        Link ID         ADV Router      Age         Seq#       Checksum Tag
+        20.0.0.0/24     2.2.2.2         1200        0x8000000b 0x00234d  3
+        192.168.1.0/24  1.1.1.1         1200        0x8000000b 0x00234d  3
+        10.0.0.0/24     2.2.2.2         1200        0x8000000b 0x00234d  3
+        172.16.0.0/24   3.3.3.3         1200        0x8000000b 0x00234d  3
+        """
+
+    # Assuming gw_shell is defined and has the exec_command method
+    output = exec_command('imish -e "show ip ospf database"')
+    gw_output_routes = []
+
+    # Extract the part of the output after 'AS External Link States'
+    route = output.partition('AS External Link States')[2]
+
+    # Split the relevant part into lines and process each line
+    for line in route.splitlines()[1:]:
+        match = re.findall(r'[0-9]+(?:\.[0-9]+){3}/24', line)
+        # match = re.findall(r'[0-9]+(?:\.[0-9]+){3}/24', line)
+        # (?:...): A non-capturing group.
+        # This is used to group parts of the pattern without capturing them for back-references.
+        # without ?: match will consider .0 as the matched string, but we only need complete match
+        if match:
+            gw_output_routes.append(match[0])
+
+    # Output the extracted routes for debugging
+    print("Extracted Routes:", gw_output_routes)
+
+def test_findall_8():
+    # ?=
+    """
+    Syntax: (?=...)
+
+... represents the pattern that must follow the current position in the string.
+Behavior:
+
+The lookahead does not consume characters in the string. It only checks if the specified pattern exists.
+If the pattern exists, the match continues. If the pattern does not exist, the match fails.
+
+    """
+    import re
+
+    # Example output
+    output = """
+    123-encap.zip
+    456-encap.zip
+    789-encap.zip
+    file-1.2-encap.zip
+    file-2.3.4-encap.zip
+    """
+
+    # Find all matches using the regular expression with positive lookahead
+    matches = re.findall(r"(?=\d\.?){3}(\d+)-encap\.zip", output)
+
+    # Log the matches
+    print("Match object:", matches)  # Output: ['123', '456', '789']
+
+def test_match_1():
+    output_lines = [
+        "eth0: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500",
+        "        inet 192.168.1.2  netmask 255.255.255.0  broadcast 192.168.1.255",
+        "        inet6 fe80::a00:27ff:fe4e:66a7  prefixlen 64  scopeid 0x20<link>",
+        "        ether 08:00:27:4e:66:a7  txqueuelen 1000  (Ethernet)",
+        "        RX packets 232  bytes 36252 (35.4 KiB)",
+        "        RX errors 0  dropped 0  overruns 0  frame 0",
+        "        TX packets 181  bytes 28980 (28.3 KiB)",
+        "        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0",
+        "",
+        "wlan0: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500",
+        "        inet 192.168.1.3  netmask 255.255.255.0  broadcast 192.168.1.255",
+        "        inet6 fe80::a00:27ff:fe4e:66a8  prefixlen 64  scopeid 0x20<link>",
+        "        ether addr:08:00:27:4e:66:a8  txqueuelen 1000  (Ethernet)",
+        "        RX packets 432  bytes 63252 (61.7 KiB)",
+        "        RX errors 0  dropped 0  overruns 0  frame 0",
+        "        TX packets 381  bytes 48980 (47.8 KiB)",
+        "        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0"
+    ]
+
+    result = {}
+    currdevice = ""
+
+    for line in output_lines:
+        # "wlan0: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500",
+        devmatch = re.match(r'([a-z0-9_.-]+):\s+', line, re.IGNORECASE)
+        if devmatch:
+            currdevice = devmatch.group(1).encode('utf8', 'ignore')
+            result[currdevice] = dict()
+
+        if not currdevice:
+            continue
+
+        # ether 08:00:27:4e:66:a8  txqueuelen 1000  (Ethernet)",
+        ethmatch = re.search(r'(?:(?:ether)|(?:HWaddr))\s(?:addr:)*(\S+)', line)
+        if ethmatch:
+            result[currdevice]['hwaddr'] = ethmatch.group(1).encode('utf8', 'ignore').lower()
+
+    print(result)
+
+def test_match_2():
+    import re
+
+    result = """
+    some text
+    Active: active (running) since Mon 2021-01-01 12:34:56; 5min ago
+    more text
+    """
+
+    """
+    ([^\)]*\)):
+
+    Character Class: [^\)]
+    Matches any character except a closing parenthesis ).
+    Asterisk: *
+    Matches zero or more occurrences of the preceding character class.
+    Literal Character: \)
+    Matches a closing parenthesis.
+    Capturing Group: (...)
+    Captures the sequence of characters matched by the preceding pattern (any sequence of characters that are not closing parentheses, followed by a closing parenthesis).
+"""
+    matched = re.match(r".*Active:([^)]*\)).*", result, re.DOTALL)
+    if matched:
+        active_status = matched.group(1).strip()
+        print(f"Active status: {active_status}")
+    else:
+        print("No match found")
+
+def test_match_multiline():
+    output = """
+    Chain application_control (1 references)
+    pkts bytes target prot opt in out source destination
+    0 0 DROP all -- * * 0.0.0.0/0 0.0.0.0/0 match-set
+    0 0 ACCEPT all -- * * 0.0.0.0/0 0.0.0.0/0 application 39995
+    """
+    str = "Chain application_control (1 references)"
+    regex = re.escape(str) + r'\n(.*)$'
+    matched = re.search(regex, output, re.MULTILINE | re.DOTALL)
+    """
+    pkts bytes target prot opt in out source destination
+    0 0 DROP all -- * * 0.0.0.0/0 0.0.0.0/0 match-set
+    0 0 ACCEPT all -- * * 0.0.0.0/0 0.0.0.0/0 application 39995
+    
+    without re.DOTALL just 1 line is fetched
+    pkts bytes target prot opt in out source destination
+    """
+    # matched = re.search(regex, output, re.MULTILINE | re.DOTALL)
+    if matched:
+        print (matched.group(1))
+        if len(matched.group(1).splitlines()[1:]) >=2:
+            print ("Found atleaset 2 firewall rules")
 """
 >rest api
 """
@@ -3001,6 +3534,8 @@ Other important packages
         'uritemplate==0.6',
 """
 """
+https://www.w3schools.com/git/git_revert.asp?remote=github
+
 Remove the files related with git
 rm -rf .git
 
@@ -3014,3 +3549,43 @@ And then try to push again
 git push -u origin master -f
 
 Success!"""
+
+
+"""
+Usage:
+py.test /tmp/ns-tests/tests/panther/services/
+test_modify_branch_wan_uplink_ipaddress.py
+--alloc-yaml-file=/tmp/ns-tests/yamls/panther/
+underlay/panther_gw_bgp_underlay_openstack_alloc.yaml
+--assert=plain  -l -v
+"""
+
+"""
+>@retry((ShellError, CmdlineTimeout), tries=3, backoff=2)
+def check_ping_ip(shell, ip, interface, number_of_packets):
+"""
+
+r"""
+>@contextmanager
+"""
+
+r"""
+>staticmethod
+"""
+def test_staticmethod_1():
+    class MathUtils:
+        @staticmethod
+        def add_numbers(a, b):
+            return a + b
+
+    # Usage
+    result = MathUtils.add_numbers(3, 5)
+    print("Result:", result)  # Output: Result: 8
+
+r"""
+>decorators
+"""
+
+r"""
+>context manager
+"""
