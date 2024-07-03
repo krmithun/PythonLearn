@@ -1,4 +1,5 @@
 '''
+                                || OM SRI SAI RAM ||
 Python learning
 https://www.w3schools.com/python/python_strings_modify.asp
 
@@ -20,7 +21,7 @@ import os
 import json
 from time import strftime
 import unittest
-# from Mymath import Basicmath
+import argparse
 
 logger = logging.getLogger()
 # timestamp = strftime("%Y%m%d_%H%M%S")
@@ -31,6 +32,15 @@ logger.addHandler(hdlr)
 logger.setLevel(logging.INFO)
 logger.info('Starting')
 
+"""
+Declaring Docstrings: The docstrings are declared using ”’triple single quotes”’ 
+or “””triple double quotes””” just below the class, method, or function declaration. 
+All functions should have a docstring.
+
+Statically typed languages: In this type of language, the data type of a variable is known at the compile time which means the programmer has to specify the data type of a variable at the time of its declaration. 
+Dynamically typed languages: These are the languages that do not require any pre-defined data type for any variable as it is interpreted at runtime by the machine itself. In these languages, interpreters assign the data type to a variable at runtime depending on its value.
+
+"""
 
 '''
 Built-in Data Types
@@ -75,31 +85,6 @@ z = float("3")   # z will be 3.0
 w = float("4.2") # w will be 4.2
 '''
 
-'''
-Fixtures are functions, which will run before each test function to which it is applied. 
-Fixtures are used to feed some data to the tests such as database connections, 
-URLs to test and some sort of input data. 
-Therefore, instead of running the same code for every test, 
-we can attach fixture function to the tests and it will run and 
-return the data to the test before executing each test.
-
-A function is marked as a fixture by −
-
-@pytest.fixture
-'''
-
-
-@pytest.fixture(scope="session", autouse=True)
-def test_newline():
-    print('\nTest prerequisites')
-    yield
-    print('\nTest cleanup')
-
-# @pytest.fixture
-# def test_create_network():
-#     print('\nTest prerequisites1')
-#     yield
-#     print('\nTest cleanup1')
 
 # https://www.geeksforgeeks.org/python-keywords/?ref=lbp
 # #
@@ -296,7 +281,7 @@ def test_string_1():
     print(' '.join(gfg))
 
 
-def test_string_2():
+def test_string_slice_1():
     # Python Program to
     # demonstrate String slicing
 
@@ -315,9 +300,49 @@ def test_string_2():
           "3rd and 2nd last character: ")
     print(String1[3:-2])
 
+def test_string_strip():
+    # String with leading and trailing whitespace and newlines
+    text = "\n\t  Hello, World!  \t\n"
+
+    # Remove leading whitespace
+    left_stripped = text.lstrip()
+    print(f"left_stripped {left_stripped}")
+
+    # Remove trailing whitespace
+    right_stripped = text.rstrip()
+    print(f"right_stripped {right_stripped}")
+
+    # Remove leading and trailing whitespace and newlines
+    result = text.strip()
+
+    print(f"complete strip {result}")  # Output: 'Hello, World!'
+
+
+def test_string_strip_specific_char():
+    # String with leading and trailing specific characters
+    text = "###   Hello, World!    ###"
+
+    # Remove leading and trailing '#'
+    result = text.strip('#')
+
+    # Remove leading and trailing '#' & Space
+    result = text.strip('# ')
+
+    print(f"'{result}'")  # Output: 'Hello, World!'
+
+
 def test_string_replace_1():
     a = "Hello, World!"
     print(a.replace("H", "J"))
+
+def test_string_join_list_of_integers():
+    # List of integers
+    numbers = [1, 2, 3, 4, 5]
+
+    # Convert each integer to a string and join them with a hyphen separator
+    result = "-".join(map(str, numbers))
+
+    print(result)  # Output: "1-2-3-4-5"
 
 
 '''
@@ -905,6 +930,53 @@ def test_list_map_1():
     for i in map(int, num):
         print(i)
 
+"""The zip() function in Python is used to combine elements from 
+two or more iterables into tuples. It pairs corresponding elements 
+from each iterable and returns an iterator of tuples."""
+def test_list_zip_add():
+    a = [1, 2, 3]
+    b = [4, 5, 6, 7]
+    for x, y in zip(a, b):
+        print(x + y)
+    # 5
+    # 7
+    # 9
+
+def test_list_zip_basic():
+    # Two lists
+    names = ['Alice', 'Bob', 'Charlie']
+    ages = [25, 30, 35]
+    place = ['NY', "TX", "AZ"]
+
+    # Zip the lists together
+    zipped = zip(names, ages, place)
+
+    # Iterate over the zipped object (iterator of tuples)
+    for item in zipped:
+        print(item)
+    print (list(zip(names, ages, place)))
+    
+    for x, y, z in zip(names, ages, place):
+        print ("name=%-10s, age=%3d, place=%-10s" %(x, y, z))
+    """
+        ('Bob', 30, 'TX')
+        ('Charlie', 35, 'AZ')
+        [('Alice', 25, 'NY'), ('Bob', 30, 'TX'), ('Charlie', 35, 'AZ')]
+        name=Alice     , age= 25, place=NY
+        name=Bob       , age= 30, place=TX
+        name=Charlie   , age= 35, place=AZ
+    """
+
+def test_list_zip_create_dict():
+    # Two lists
+    keys = ['name', 'age', 'city']
+    values = ['Alice', 25, 'New York']
+
+    # Create a dictionary by zipping the two lists
+    zipped_dict = dict(zip(keys, values))
+
+    print(zipped_dict)  # Output: {'name': 'Alice', 'age': 25, 'city': 'New York'}
+
 
 '''
 >enumerate(iterable, start)
@@ -1069,6 +1141,24 @@ def test_filter_1():
 def test_list_constructor():
     thislist = list(("apple", "banana", "cherry"))  # note the double round-brackets
     print(thislist)
+
+def test_list_remove_duplicates():
+    list_with_duplicates = [1, 2, 3, 4, 5, 4, 2, 9, 10]
+    print ("list with unique elements: %s" % list(set(list_with_duplicates)))
+    print ("dict fromkeys: %s" % dict.fromkeys(list_with_duplicates))
+    # {1: None, 2: None, 3: None, 4: None, 5: None, 9: None, 10: None}
+    print ("list with unique elements: %s" % list(dict.fromkeys(list_with_duplicates)))
+
+    unique_list = []
+    for item in list_with_duplicates:
+        if item not in unique_list:
+            unique_list.append(item)
+    print("list with unique elements: {}".format(list(set(list_with_duplicates))))
+
+
+
+
+#list>
 
 '''
 Tuples in Python: A tuple is a sequence of immutable Python objects. 
@@ -1364,7 +1454,7 @@ def test_100_4():
     print(int(a) + b)
 
 '''
-Dictionary
+>Dictionary
 Dictionaries are used to store data values in key:value pairs.
 
 A dictionary is a collection which is ordered*, changeable and do not allow duplicates.
@@ -1384,7 +1474,7 @@ values()	Returns a list of all the values in the dictionary
 
 '''
 
-def test_dict1():
+def test_dict_accessing():
     """
    Test dictionary functionlity.
    :return:
@@ -1472,6 +1562,86 @@ def test_dict_del():
     del thisdict["model"]
     print(thisdict)
     # {'brand': 'Ford', 'year': 1964}
+
+def test_dict_comprehension_1():
+    # {key_expression: value_expression for item in iterable if condition}
+    # List of numbers
+    numbers = [1, 2, 3, 4, 5]
+
+    # Create a dictionary with numbers as keys and their squares as values
+    squares = {num: num ** 2 for num in numbers}
+
+    print(squares)  # Output: {1: 1, 2: 4, 3: 9, 4: 16, 5: 25}
+
+def test_dict_zip_1():
+    pass
+
+def test_dict_fromkeys():
+    list_with_duplicates = [1, 2, 3, 4, 5, 4, 2, 9, 10]
+    print ("dict fromkeys: %s" % dict.fromkeys(list_with_duplicates))
+    # {1: None, 2: None, 3: None, 4: None, 5: None, 9: None, 10: None}
+
+"""
+The setdefault() method in Python's dictionary is used to get the value of a key if the key is in the dictionary; if not, it inserts the key with a specified value and returns that value. This method is useful for initializing the values of dictionary keys when working with nested dictionaries or counting occurrences of elements.
+
+dict.setdefault(key, default=None)
+key: The key to look for in the dictionary.
+default: The value to set and return if the key is not found in the dictionary. If not provided, it defaults to None.
+"""
+def test_dict_setdefault_basic():
+    # Create a dictionary
+    my_dict = {'a': 1, 'b': 2, 'c': 3}
+
+    # Use setdefault to get the value of an existing key
+    value = my_dict.setdefault('b', 10)
+    print(value)  # Output: 2
+
+    # Use setdefault to get the value of a non-existing key and set it
+    value = my_dict.setdefault('d', 10)
+    print(value)  # Output: 10
+
+    # Print the updated dictionary
+    print(my_dict)  # Output: {'a': 1, 'b': 2, 'c': 3, 'd': 10}
+
+def test_dict_setdefault_counting():
+    # List of elements
+    elements = ['apple', 'banana', 'apple', 'orange', 'banana', 'apple']
+
+    # Dictionary to store the counts
+    count_dict = {}
+
+    # Count occurrences using setdefault
+    for element in elements:
+        count_dict[element] = count_dict.setdefault(element, 0) + 1
+
+    print(count_dict)  # Output: {'apple': 3, 'banana': 2, 'orange': 1}
+
+
+def test_dict_setdefault_nested_dict():
+    # List of data with nested structure
+    data = [
+        ('fruit', 'apple', 10),
+        ('fruit', 'banana', 20),
+        ('vegetable', 'carrot', 30),
+        ('fruit', 'orange', 40),
+        ('vegetable', 'spinach', 50)
+    ]
+
+    # Dictionary to store the nested data
+    nested_dict = {}
+
+    # Populate the nested dictionary using setdefault
+    for category, item, quantity in data:
+        nested_dict.setdefault(category, {}).setdefault(item, 0)
+        nested_dict[category][item] += quantity
+
+    print(nested_dict)
+    # Output:
+    # {
+    #     'fruit': {'apple': 10, 'banana': 20, 'orange': 40},
+    #     'vegetable': {'carrot': 30, 'spinach': 50}
+    # }
+
 
 '''
 If else loop
@@ -2461,17 +2631,6 @@ def test_file_1():
             print(line.strip())  # strip() removes the newline character
 
 
-def test_json():
-    numbers = [2, 3, 5, 7, 11, 13]
-    filename = 'numbers.json'
-    with open(filename, 'w') as f_obj:
-        # f_obj.write(str(numbers))
-        json.dump(numbers, f_obj)
-    with open(filename) as f_obj:
-        numbers = json.load(f_obj)
-    print(numbers)
-
-
 def test_unittest():
     # from full_names import get_full_name
     janis = get_full_name('janis', 'joplin')
@@ -2529,16 +2688,6 @@ def test_string1():
     x = 10020
     for idx in range(0, 5):
         print(x[idx], "=", id(x[idx]))
-
-
-def test_zip1():
-    a = [1, 2, 3]
-    b = [4, 5, 6, 7]
-    for x, y in zip(a, b):
-        print(x + y)
-    # 5
-    # 7
-    # 9
 
 
 def test_getattr1():
@@ -3552,6 +3701,25 @@ def test_re_sub_str():
 
 
 """
+>os
+"""
+def test_os_file_paths():
+    import os
+    def list_all_files(base_dir):
+        file_paths = []
+        for dirpath, dirnames, filenames in os.walk(base_dir):
+            for filename in filenames:
+                file_paths.append(os.path.join(dirpath, filename))
+        return file_paths
+
+    # Example usage
+    base_dir = os.getcwd()
+    all_files = list_all_files(base_dir)
+    for file_path in all_files:
+        print(file_path)
+
+
+"""
 >rest api
 """
 def test_rest_api():
@@ -3741,3 +3909,124 @@ r"""
 r"""
 >context manager
 """
+
+"""
+>pytest.raises
+Use the pytest.raises context manager to assert that an exception is raised
+Used to test negative scenarios where test supposed to fail 
+"""
+def test_divide_by_zero():
+    def divide(a, b):
+        if b == 0:
+            raise ValueError("Cannot divide by zero")
+        return a / b
+
+    with pytest.raises(ValueError) as exc_info:
+        divide(10, 0)
+    assert str(exc_info.value) == "Cannot divide by zero"
+
+
+"""
+You can run a specific test file, test class, or test function by specifying its path
+pytest test_file.py
+pytest test_file.py::TestClass
+pytest test_file.py::TestClass::test_method
+"""
+
+
+'''
+Fixtures are functions, which will run before each test function to which it is applied. 
+Fixtures are used to feed some data to the tests such as database connections, 
+URLs to test and some sort of input data. 
+Therefore, instead of running the same code for every test, 
+we can attach fixture function to the tests and it will run and 
+return the data to the test before executing each test.
+
+A function is marked as a fixture by −
+
+@pytest.fixture
+'''
+
+class DatabaseConnection:
+    def connect(self):
+        print ('Connect')
+    def disconnect(self):
+        print ('Disconnect')
+
+@pytest.fixture(scope="session")
+def connection(self):
+    DatabaseConnection.connect()
+    yield 'db'
+    DatabaseConnection.disconnect()
+def test_database_connection(connection):
+    print ('inside db connection')
+
+
+
+@pytest.fixture(scope="session", autouse=True)
+def test_newline():
+    print('\nTest prerequisites')
+    yield
+    print('\nTest cleanup')
+
+r"""
+>args
+"""
+def test_command_line_args_1():
+    import argparse
+
+    if __name__ == '__main__':
+        parser = argparse.ArgumentParser()
+        parser.add_argument("-du", "--depot-username", help="Depot Username",
+                            dest="depot_username", required=True)
+        parser.add_argument("-dp", "--depot-password", help="Depot Password",
+                            dest="depot_password", required=True)
+        parser.add_argument("-si", "--sddc-ip", help="Sddc Username",
+                            dest="sddc_ip", default="192.168.10.100")
+        parser.add_argument("-su", "--sddc-username", help="Sddc Username",
+                            dest="sddc_username", default="admin")
+        parser.add_argument("-sp", "--sddc-password", help="Sddc Password",
+                            dest="sddc_password", default="Vmware")
+        args = parser.parse_args()
+
+        print(args.depot_username, args.depot_password,
+              args.sddc_username, args.sddc_password, args.sddc_ip)
+
+"""
+>math module
+"""
+def test_math_floor():
+    import math
+
+    # Numbers to be used
+    numbers = [4.7, -4.7, 3.3, -3.3, 0.0]
+
+    for num in numbers:
+        floor_value = math.floor(num)
+        ceil_value = math.ceil(num)
+        print(f'Number: {num}')
+        print(f'  math.floor: {floor_value}')
+        print(f'  math.ceil: {ceil_value}')
+        print()
+        """
+            Number: 4.7
+              math.floor: 4
+              math.ceil: 5
+            
+            Number: -4.7
+              math.floor: -5
+              math.ceil: -4
+            
+            Number: 3.3
+              math.floor: 3
+              math.ceil: 4
+            
+            Number: -3.3
+              math.floor: -4
+              math.ceil: -3
+            
+            Number: 0.0
+              math.floor: 0
+              math.ceil: 0
+            """
+
