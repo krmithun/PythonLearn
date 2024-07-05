@@ -1053,7 +1053,9 @@ def test_list_enumerate():
     print(l2)
 
 '''
->map() function returns a map object(which is an iterator) of the results after applying the given function to each item of a given iterable (list, tuple etc.)
+>map() function returns a map object(which is an iterator) 
+of the results after applying the given function to each 
+item of a given iterable (list, tuple etc.)
 
 Python map() Function Syntax
 Syntax: map(fun, iter)
@@ -1231,7 +1233,7 @@ def test_tuple_loop_1():
 
 
 '''
-Sets are used to store multiple items in a single variable.
+>Sets are used to store multiple items in a single variable.
 Set items are unordered, unchangeable, and do not allow duplicate values.
 
 Method	Shortcut	Description
@@ -1272,8 +1274,7 @@ def test_set1():
     my_set.remove(6)
     print(my_set)
 
-    # discard an element
-    # not present in my_set
+    # discard an element not present in my_set will not throw error
     # Output: {1, 3, 5}
     my_set.discard(2)
     print(my_set)
@@ -1329,6 +1330,10 @@ def test_set2():
     # {'l', 'H', 'e', 'o', 'W'}
     # set()
     # set()
+
+'''
+>frozenset
+'''
 
 '''
 Iterations in Python: Iterations or looping can be performed in python by ‘for’ 
@@ -2925,6 +2930,15 @@ def test_nonlocal_1():
 
     fun()
 
+def test_global_1():
+    def insidef():
+        global var1
+        var1 = "local"
+
+    var1 = 'global'
+    print (var1)
+    insidef()
+    print (var1)
 """
 >module
 """
@@ -3698,6 +3712,36 @@ def test_re_sub_str():
     steelhead_string = re.sub(r'Steelheads', '', steelhead_string).strip(' \n\t\r')
 
     print(steelhead_string)  # Output: "are fish."
+
+r'''
+>compile
+The re.compile() function in Python's re module is used to compile a 
+regular expression pattern into a regular expression object. 
+This object can be used to match the pattern against strings, 
+which can improve performance when the same pattern is used multiple times. 
+Here are some examples to illustrate its usage:
+'''
+
+
+def test_compile_multiline():
+    output = """
+    Chain application_control (1 references)
+    pkts bytes target prot opt in out source destination
+    0 0 DROP all -- * * 0.0.0.0/0 0.0.0.0/0 match-set
+    0 0 ACCEPT all -- * * 0.0.0.0/0 0.0.0.0/0 application 39995
+    """
+    pattern = re.compile(r'application\s(\d+)')
+    matched = pattern.search(output, re.MULTILINE | re.DOTALL)
+    """
+    pkts bytes target prot opt in out source destination
+    0 0 DROP all -- * * 0.0.0.0/0 0.0.0.0/0 match-set
+    0 0 ACCEPT all -- * * 0.0.0.0/0 0.0.0.0/0 application 39995
+
+    without re.DOTALL just 1 line is fetched
+    pkts bytes target prot opt in out source destination
+    """
+    if matched:
+        print(matched.group(1))
 
 
 """
