@@ -344,7 +344,15 @@ def test_string_join_list_of_integers():
 
     print(result)  # Output: "1-2-3-4-5"
 
-
+def test_string_excercise_1():
+    str1 = "abbcccddde"
+    dict1 = {}
+    for ch in str1:
+        # if ch not in dict.keys():
+        #     dict[ch] = 0
+        # dict[ch] += 1
+        dict1[ch] = dict1.setdefault(ch, 0) + 1
+    print (dict1)
 '''
 >Lists in Python:
 Lists are one of the most powerful data structures in python. 
@@ -1587,7 +1595,11 @@ def test_dict_fromkeys():
     # {1: None, 2: None, 3: None, 4: None, 5: None, 9: None, 10: None}
 
 """
-The setdefault() method in Python's dictionary is used to get the value of a key if the key is in the dictionary; if not, it inserts the key with a specified value and returns that value. This method is useful for initializing the values of dictionary keys when working with nested dictionaries or counting occurrences of elements.
+The setdefault() method in Python's dictionary is used to get the value of a key 
+if the key is in the dictionary; 
+if not, it inserts the key with a specified value and returns that value. 
+This method is useful for initializing the values of dictionary keys when 
+working with nested dictionaries or counting occurrences of elements.
 
 dict.setdefault(key, default=None)
 key: The key to look for in the dictionary.
@@ -2156,24 +2168,6 @@ def test_count_words_file():
         count += len(strnew.split())
     print("Total words = {}".format(count))
 
-'''
->Class
-Note: The __init__() function is called 
-automatically every time the class is being used to create a new object.
-'''
-def test_class1():
-    class Employee:
-        def __init__(self, name, id_, age):
-            self.name = name
-            self.id = id_
-            self.age = age
-
-        def age(self):
-            return self.age
-
-    emp1 = Employee("Mithun", 213525, 38)
-    print(emp1.name)
-
 
 def test_ssh():
     host = "test.rebex.net"
@@ -2486,8 +2480,100 @@ def test_is_1():
         print("False")
 
 
+'''
+############################## >OOPS Concepts ##################################
+>Class
+Classes in Python provide a way to structure and organize code into reusable components. 
+They facilitate code reusability, modularity, and maintainability by 
+encapsulating data (attributes) and functionality (methods) within objects.
+Classes in Python provide a way to structure and organize code into reusable components. 
+They facilitate code reusability, modularity, and maintainability by 
+encapsulating data (attributes) and functionality (methods) within objects.
+
+class MyClass:
+    def __init__(self, arg1, arg2):
+        self.arg1 = arg1
+        self.arg2 = arg2
+    def some_method(self):
+        # Method definition
+        pass
+
+Constructors are generally used for instantiating an object. 
+The task of constructors is to initialize(assign values) to the 
+data members of the class when an object of the class is created. 
+In Python the __init__() method is called the constructor and 
+is always called when an object is created.        
+Note: The __init__() function is called 
+automatically every time the class is being used to create a new object.
+'''
+def test_class_and_instance_attribute():
+    class Dog:
+        # class attribute
+        attr1 = "mammal"
+
+        # Instance attribute
+        def __init__(self, name):
+            self.name = name
+
+    # Driver code
+    # Object instantiation
+    Rodger = Dog("Rodger")
+    Tommy = Dog("Tommy")
+
+    # Accessing class attributes
+    print("Rodger is a {}".format(Rodger.__class__.attr1))
+    print("Tommy is also a {}".format(Tommy.__class__.attr1))
+
+    # Accessing instance attributes
+    print("My name is {}".format(Rodger.name))
+    print("My name is {}".format(Tommy.name))
+
+def test_class_method_access():
+    class Dog:
+        # class attribute
+        attr1 = "mammal"
+
+        # Instance attribute
+        def __init__(self, name):
+            self.name = name
+
+        def speak(self):
+            print("My name is {}".format(self.name))
+
+    # Driver code
+    # Object instantiation
+    Rodger = Dog("Rodger")
+    Tommy = Dog("Tommy")
+
+    # Accessing class methods
+    Rodger.speak()
+    Tommy.speak()
+
+
 """
 >Inheritance
+Inheritance is a mechanism that allows us to take all of the properties 
+of another class and apply them to our own. 
+The parent class is the one from which the attributes and functions 
+are derived (also called as Base Class). 
+Child Class refers to a class that uses the properties of 
+another class (also known as a Derived class). 
+An Is-A Relation is another name for inheritance.
+# Parent class
+class Parent :        
+           # Constructor
+           # Variables of Parent class
+
+           # Methods
+           ...
+
+# Child class inheriting Parent class 
+class Child(Parent) :  
+           # constructor of child class
+           # variables of child class
+           # methods of child class
+
+           ...
 """
 
 def test_oops_inheritence_1():
@@ -2578,6 +2664,85 @@ def test_oops_polymorphism_inheritance():
     Squares have each angle equal to 90 degrees.
     153.93804002589985
     """
+
+r'''
+>Aggregation
+Aggregation is a specialized form of composition where the life cycle 
+of the contained object is not strictly dependent on the life cycle of the container object.
+
+In OOP, aggregation represents a "has-a" relationship between two classes. 
+It means one class (the whole) contains an object of another class (the part) 
+as a member variable. The lifetime of the part object is 
+not tied to the lifetime of the whole object.
+
+'''
+def test_oops_aggregation_1():
+    class Battery:
+        def __init__(self, capacity):
+            self.capacity = capacity
+
+    class ElectricCar:
+        def __init__(self, battery):
+            self.battery = battery  # Aggregation: ElectricCar has a Battery
+
+        def battery_capacity(self):
+            return f"Battery capacity: {self.battery.capacity} kWh"
+
+    battery = Battery(100)
+    car = ElectricCar(battery)
+    print(car.battery_capacity())  # Output: Battery capacity: 100 kWh
+
+r'''
+>Composition
+Composition is a type of Aggregation in which two entities are extremely reliant on one another.
+
+It indicates a relationship component.
+Both entities are dependent on each other in composition.
+The composed object cannot exist without the other entity when there is a composition between two entities.
+'''
+def test_oops_composition_1():
+    # Code to demonstrate Composition
+
+    # Class Salary in which we are
+    # declaring a public method annual salary
+    class Salary:
+        def __init__(self, pay, bonus):
+            self.pay = pay
+            self.bonus = bonus
+
+        def annual_salary(self):
+            return (self.pay * 12) + self.bonus
+
+            # Class EmployeeOne which does not
+
+    # inherit the class Salary yet we will
+    # use the method annual salary using
+    # Composition
+    class EmployeeOne:
+        def __init__(self, name, age, pay, bonus):
+            self.name = name
+            self.age = age
+
+            # Making an object in which we are
+            # calling the Salary class
+            # with proper arguments.
+            self.obj_salary = Salary(pay, bonus)  # composition
+
+        # Method which calculates the total salary
+        # with the help of annual_salary() method
+        # declared in the Salary class
+        def total_sal(self):
+            return self.obj_salary.annual_salary()
+
+            # Making an object of the class EmployeeOne
+
+    # and providing necessary arguments
+    emp = EmployeeOne('Geek', 25, 10000, 1500)
+
+    # calling the total_sal method using
+    # the emp object
+    print(emp.total_sal())
+
 
 """
 >open
@@ -3743,6 +3908,112 @@ def test_compile_multiline():
     if matched:
         print(matched.group(1))
 
+
+r'''
+>generators
+'''
+def test_generator_with_loop():
+    def count_up_to(max):
+        count = 1
+        while count <= max:
+            yield count
+            count += 1
+
+    # Using the generator
+    # for number in count_up_to(5):
+    #     print(number)
+
+        # OR
+    gen = count_up_to(5)
+    print (next(gen))
+    print (next(gen))
+    print (next(gen))
+    print (next(gen))
+    print (next(gen))
+
+    # Output:
+    # 1
+    # 2
+    # 3
+    # 4
+    # 5
+
+
+def test_generator_time_example_without():
+    import random
+    import psutil  # pip install psutil
+    import os
+    from datetime import datetime
+
+    def memory_usage_psutil():
+        # return the memory usage in MB
+        process = psutil.Process(os.getpid())
+        mem = process.memory_info().rss / float(2 ** 20)
+        return '{:.2f} MB'.format(mem)
+
+    names = ['John', 'Milovan', 'Adam', 'Steve', 'Rick', 'Thomas']
+    majors = ['Math', 'Engineering', 'CompSci', 'Arts', 'Business']
+
+    print('Memory (Before): {}'.format(memory_usage_psutil()))
+
+    def people_list(num_people):
+        result = []
+        for i in range(num_people):
+            person = {
+                'id': i,
+                'name': random.choice(names),
+                'major': random.choice(majors)
+            }
+            result.append(person)
+        return result
+
+    t1 = datetime.now()
+    people = people_list(1000000)
+    t2 = datetime.now()
+
+    print('Memory (After) : {}'.format(memory_usage_psutil()))
+    print('Took {} Seconds'.format(t2 - t1))
+
+    # Memory (Before): 35.46 MB
+    # Memory (After) : 306.13 MB
+    # Took 0:00:01.374312 Seconds
+
+def test_generator_time_example():
+    import random
+    import psutil  # pip install psutil
+    import os
+    from datetime import datetime
+
+    def memory_usage_psutil():
+        # return the memory usage in MB
+        process = psutil.Process(os.getpid())
+        mem = process.memory_info().rss / float(2 ** 20)
+        return '{:.2f} MB'.format(mem)
+
+    names = ['John', 'Milovan', 'Adam', 'Steve', 'Rick', 'Thomas']
+    majors = ['Math', 'Engineering', 'CompSci', 'Arts', 'Business']
+
+    print('Memory (Before): {}'.format(memory_usage_psutil()))
+
+    def people_generator(num_people):
+        for i in range(num_people):
+            person = {
+                'id': i,
+                'name': random.choice(names),
+                'major': random.choice(majors)
+            }
+            yield person
+
+    t1 = datetime.now()
+    people = people_generator(10000000000000000)
+    t2 = datetime.now()
+
+    print('Memory (After) : {}'.format(memory_usage_psutil()))
+    print('Took {} Seconds'.format(t2 - t1))
+
+    # Memory (Before): 36.28 MB
+    # Memory (After) : 36.28 MB
+    # Took 0:00:00 Seconds
 
 """
 >os
