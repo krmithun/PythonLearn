@@ -2506,6 +2506,63 @@ is always called when an object is created.
 Note: The __init__() function is called 
 automatically every time the class is being used to create a new object.
 '''
+
+def test_default_constructor():
+    class GeekforGeeks:
+
+        # default constructor
+        def __init__(self):
+            self.geek = "GeekforGeeks"
+
+        # a method for printing data members
+        def print_Geek(self):
+            print(self.geek)
+
+    # creating object of the class
+    obj = GeekforGeeks()
+
+    # calling the instance method using the object obj
+    obj.print_Geek()
+
+def test_parametrized_constructor():
+    class Addition:
+        first = 0
+        second = 0
+        answer = 0
+
+        # parameterized constructor
+        def __init__(self, f, s):
+            self.first = f
+            self.second = s
+
+        def display(self):
+            print("First number = " + str(self.first))
+            print("Second number = " + str(self.second))
+            print("Addition of two numbers = " + str(self.answer))
+
+        def calculate(self):
+            self.answer = self.first + self.second
+
+    # creating object of the class
+    # this will invoke parameterized constructor
+    obj1 = Addition(1000, 2000)
+
+    # creating second object of same class
+    obj2 = Addition(10, 20)
+
+    # perform Addition on obj1
+    obj1.calculate()
+
+    # perform Addition on obj2
+    obj2.calculate()
+
+    # display result of obj1
+    obj1.display()
+
+    # display result of obj2
+    obj2.display()
+
+
 def test_class_and_instance_attribute():
     class Dog:
         # class attribute
@@ -2549,7 +2606,93 @@ def test_class_method_access():
     Rodger.speak()
     Tommy.speak()
 
+'''
+While Python does not support method overloading in the traditional sense 
+(having multiple methods with the same name but different parameters), 
+you can achieve a form of constructor overloading using 
+default parameter values or by using class methods that act as alternative constructors.
+'''
+def test_class_constructor_overloading():
+    class Person:
+        def __init__(self, name=None, age=None):
+            if name is not None and age is not None:
+                self.name = name
+                self.age = age
+            else:
+                self.name = "Unknown"
+                self.age = 0
 
+        @classmethod
+        def from_birth_year(cls, name, birth_year):
+            return cls(name, 2024 - birth_year)
+
+    # Using default constructor
+    person1 = Person("Alice", 30)
+    print(person1.name, person1.age)  # Output: Alice 30
+
+    # Using alternative constructor
+    person2 = Person.from_birth_year("Bob", 1990)
+    print(person2.name, person2.age)  # Output: Bob 34
+
+'''
+>hasattr
+The hasattr function in Python is used to check if an object has a particular attribute. 
+It takes two arguments: the object and the name of the attribute as a string. 
+If the object has the specified attribute, hasattr returns True; otherwise, it returns False.
+'''
+def test_class_hasattr_1():
+    class AssetManager:
+        @classmethod
+        def update_asset_info(cls, ServerAssetInformation):
+            for setting in ServerAssetInformation:
+                if hasattr(setting, 'AdminName'):
+                    cls.input_setting_info('AdminName', setting.AdminName)
+                if hasattr(setting, 'AdminEmail'):
+                    cls.input_setting_info('AdminEmail', setting.AdminEmail)
+                if hasattr(setting, 'AdminPhone'):
+                    cls.input_setting_info('AdminPhone', setting.AdminPhone)
+                if hasattr(setting, 'AdminOtherInfo'):
+                    cls.input_setting_info('AdminOtherInfo', setting.AdminOtherInfo)
+
+        @classmethod
+        def input_setting_info(cls, attribute, value):
+            print(f"Updating {attribute} to {value}")
+
+    # Example usage
+    class ServerAsset:
+        def __init__(self, AdminName=None, AdminEmail=None, AdminPhone=None, AdminOtherInfo=None):
+            self.AdminName = AdminName
+            self.AdminEmail = AdminEmail
+            self.AdminPhone = AdminPhone
+            self.AdminOtherInfo = AdminOtherInfo
+
+    # Creating some example ServerAsset objects
+    assets = [
+        ServerAsset(AdminName="Alice", AdminEmail="alice@example.com"),
+        ServerAsset(AdminPhone="123-456-7890", AdminOtherInfo="Other info"),
+        ServerAsset(AdminName="Bob", AdminPhone="987-654-3210"),
+    ]
+
+    # Updating asset information
+    AssetManager.update_asset_info(assets)
+
+def test_class_getattr_1():
+    class Animal:
+        def __init__(self, species, sound):
+            self.species = species
+            self.sound = sound
+
+        def make_sound(self):
+            print (f'Animal {self.species} makes sound {self.sound}')
+
+    animal = Animal('Dog', 'Bark')
+    print (getattr(animal, 'species'))
+
+    if hasattr(animal, 'make_sound'):
+        animal.make_sound()
+
+    if not getattr(animal, 'fly', None):
+        print ('No attribute \'fly\'')
 """
 >Inheritance
 Inheritance is a mechanism that allows us to take all of the properties 
@@ -3030,6 +3173,34 @@ type()	Returns the type of an object
 vars()	Returns the __dict__ property of an object
 zip()	Returns an iterator, from two or more iterators
 '''
+
+'''
+>callable
+The callable function in Python is used to check if an object appears to be callable, 
+which means you can call it like a function. 
+It returns True if the object is callable and False otherwise. 
+Callable objects can be functions, methods, or instances of classes that have a __call__ method.
+'''
+def test_callable_1():
+    class Calculator:
+        def add(self, a, b):
+            return a + b
+
+        def subtract(self, a, b):
+            return a - b
+
+    def execute_operation(obj, operation, *args):
+        if callable(getattr(obj, operation, None)):
+            method = getattr(obj, operation)
+            return method(*args)
+        else:
+            return f"Operation '{operation}' is not supported."
+
+    calc = Calculator()
+
+    print(execute_operation(calc, "add", 5, 3))  # Output: 8
+    print(execute_operation(calc, "subtract", 10, 4))  # Output: 6
+    print(execute_operation(calc, "multiply", 2, 3))  # Output: Operation 'multiply' is not supported.
 
 
 """
@@ -4203,6 +4374,63 @@ def check_ping_ip(shell, ip, interface, number_of_packets):
 r"""
 >@contextmanager
 """
+def test_contextmanager_1():
+    from contextlib import contextmanager
+
+    @contextmanager
+    def tcp_traffic_flow(source, dest):
+        """Create tcp traffic flow object."""
+        traffic_flow = TrafficFlow.get(source, dest)
+        traffic_flow.set_client_tool(tool='pload', port=TCP_DST_PORT,
+                                     other_options=" -L 0 -q -1 -U full-duplex")
+        traffic_flow.set_server_tool(tool='pload', port=TCP_DST_PORT,
+                                     other_options=" -B 5000")
+        try:
+            yield traffic_flow
+        finally:
+            traffic_flow.stop()
+
+    # Example usage:
+    source = "SourceObject"
+    dest = "DestObject"
+
+    with tcp_traffic_flow(source, dest) as traffic:
+        # Interact with the traffic flow object
+        traffic.start()  # Example method, depending on the TrafficFlow class implementation
+
+    # After exiting the 'with' block, the traffic flow is automatically stopped.
+
+def test_contextmanager_2():
+    from contextlib import contextmanager
+    import sqlite3
+
+    @contextmanager
+    def db_connection(db_name):
+        """Context manager for managing a database connection."""
+        conn = sqlite3.connect(db_name)
+        cursor = conn.cursor()
+        try:
+            yield cursor
+            conn.commit()  # Commit the transaction if no errors occurred
+        except Exception as e:
+            conn.rollback()  # Rollback the transaction in case of an error
+            raise e
+        finally:
+            cursor.close()
+            conn.close()
+
+    # Example usage:
+    db_name = 'example.db'
+
+    with db_connection(db_name) as cursor:
+        cursor.execute('CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY, name TEXT)')
+        cursor.execute('INSERT INTO users (name) VALUES (?)', ('Alice',))
+        cursor.execute('INSERT INTO users (name) VALUES (?)', ('Bob',))
+        cursor.execute('SELECT * FROM users')
+        users = cursor.fetchall()
+        for user in users:
+            print(user)
+
 
 r"""
 >staticmethod
@@ -4217,7 +4445,168 @@ def test_staticmethod_1():
     result = MathUtils.add_numbers(3, 5)
     print("Result:", result)  # Output: Result: 8
 
-r"""
+r'''
+@classmethod
+The @classmethod decorator in Python is used to define a method that 
+is bound to the class and not the instance of the class. 
+This means that the method can be called on the class itself, 
+without having to create an instance of the class. 
+Class methods take a reference to the class (cls) as their first parameter, 
+which allows them to modify class state that applies across all instances of the class.
+'''
+def test_classmethod_factory_method():
+    class Book:
+        def __init__(self, title, author):
+            self.title = title
+            self.author = author
+
+        @classmethod
+        def from_string(cls, book_str):
+            title, author = book_str.split(', ')
+            return cls(title, author)
+
+    # Creating an instance using the regular constructor
+    book1 = Book("1984", "George Orwell")
+
+    # Creating an instance using the alternative constructor
+    book_str = "Brave New World, Aldous Huxley"
+    book2 = Book.from_string(book_str)
+
+    print(book1.title, book1.author)  # Output: 1984 George Orwell
+    print(book2.title, book2.author)  # Output: Brave New World Aldous Huxley
+
+'''
+>@property - to get
+>@age.setter - to set
+>@name.deleter - to delete
+
+Benefits of Using @property
+
+Encapsulation: 
+    It allows you to hide the internal implementation of attribute access, 
+    providing a clean interface.
+Validation: 
+    You can add validation logic when getting or setting attributes, 
+    ensuring that the object's state remains consistent.
+Computed Properties: 
+    You can create properties that are computed on the fly, 
+    such as the area property in the Circle class.
+Read-Only Properties: 
+    It allows you to create attributes that can be read but not modified directly.
+'''
+def test_property_setter():
+    class Person:
+        def __init__(self, name, age):
+            self._name = name
+            self._age = age
+
+        @property
+        def name(self):
+            return self._name
+
+        @name.setter
+        def name(self, value):
+            if not value:
+                raise ValueError("Name cannot be empty")
+            self._name = value
+
+        @property
+        def age(self):
+            return self._age
+
+        @age.setter
+        def age(self, value):
+            if value < 0:
+                raise ValueError("Age cannot be negative")
+            self._age = value
+
+    # Creating an instance of Person
+    person = Person("Alice", 30)
+
+    # Accessing properties
+    print(person.name)  # Output: Alice
+    print(person.age)  # Output: 30
+
+    # Modifying properties
+    person.name = "Bob"
+    person.age = 35
+    print(person.name)  # Output: Bob
+    print(person.age)  # Output: 35
+
+    # Trying to set invalid values
+    try:
+        person.age = -5
+    except ValueError as e:
+        print(e)  # Output: Age cannot be negative
+
+    try:
+        person.name = ""
+    except ValueError as e:
+        print(e)  # Output: Name cannot be empty
+
+
+def test_property_readonly():
+    class Circle:
+        def __init__(self, radius):
+            self._radius = radius
+
+        @property
+        def radius(self):
+            return self._radius
+
+        @property
+        def area(self):
+            return 3.14159 * (self._radius ** 2)
+
+    # Creating an instance of Circle
+    circle = Circle(5)
+
+    # Accessing read-only properties
+    print(circle.radius)  # Output: 5
+    print(circle.area)    # Output: 78.53975
+
+    # Attempting to modify a read-only property
+    try:
+        circle.area = 100
+    except AttributeError as e:
+        print(e)  # Output: can't set attribute
+
+'''
+@name.deleter
+'''
+def test_property_deleter():
+    class Employee:
+        def __init__(self, name, position):
+            self._name = name
+            self._position = position
+
+        @property
+        def name(self):
+            return self._name
+
+        @name.setter
+        def name(self, value):
+            self._name = value
+
+        @name.deleter
+        def name(self):
+            print("Deleting name...")
+            self._name = None
+
+    # Creating an instance of Employee
+    employee = Employee("John", "Manager")
+
+    # Accessing and modifying properties
+    print(employee.name)  # Output: John
+    employee.name = "Jane"
+    print(employee.name)  # Output: Jane
+
+    # Deleting the property
+    del employee.name
+    print(employee.name)  # Output: None
+
+
+"""
 >decorators
 """
 
