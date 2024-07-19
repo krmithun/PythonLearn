@@ -8,6 +8,7 @@ Run: pytest -sv scratch.py -k test_assert --pdb
 https://github.com/krmithun/PythonLearn/blob/main/scratch.py
 '''
 import fnmatch
+import functools
 import re
 import subprocess
 import sys
@@ -541,14 +542,7 @@ def test_list1():
     # Reversing the order of a list
     users.reverse()
 
-    # Printing the numbers 0 to 1000
-    for number in range(11):
-        print(number)
-    # Printing the numbers 1 to 1000
-    for number in range(1, 11):
-        print(number)
-    # Making a list of numbers from 1 to a million
-    numbers = list(range(1, 11))
+
 
     # Finding the minimum value in a list
     ages = [93, 99, 66, 17, 85, 1, 35, 82, 2, 77]
@@ -1061,6 +1055,19 @@ def test_list_enumerate():
     print(l2)
 
 '''
+>range
+'''
+def test_range_1():
+    # Printing the numbers 0 to 1000
+    for number in range(11):
+        print(number)
+    # Printing the numbers 1 to 1000
+    for number in range(1, 11):
+        print(number)
+    # Making a list of numbers from 1 to a million
+    numbers = list(range(1, 11))
+
+'''
 >map() function returns a map object(which is an iterator) 
 of the results after applying the given function to each 
 item of a given iterable (list, tuple etc.)
@@ -1137,6 +1144,41 @@ def test_filter_none():
 
     filtered = list(filter(None, numbers))
     print(filtered)
+
+'''
+>reduce
+'''
+def test_reduce_1():
+    from functools import reduce
+
+    numbers = [1, 2, 3, 4, 5]
+    # import pdb; pdb.set_trace()
+    result = reduce(lambda x, y: x + y, numbers)
+    print(result)  # Output: 15
+
+'''
+>partial
+'''
+def test_partial():
+    from functools import partial
+
+    def calculate_total(price, tax_rate, discount):
+        return price + (price * tax_rate / 100) - discount
+
+    # Create a function with a fixed tax rate of 5%
+    total_with_50_discount = partial(calculate_total, discount=50)
+
+    # Calculate totals with different prices and discounts
+    print(total_with_50_discount(100, 10))  # Output: 95.0
+    print(total_with_50_discount(200, 20))  # Output: 190.0
+
+    # Create a function with fixed tax rate and discount
+    total_with_5_tax_and_10_discount = partial(calculate_total, tax_rate=0.05, discount=10)
+
+    # Calculate totals with different prices
+    print(total_with_5_tax_and_10_discount(100))  # Output: 95.0
+    print(total_with_5_tax_and_10_discount(200))  # Output: 200.0
+
 
 '''
 >fnmatch
@@ -2635,6 +2677,43 @@ def test_class_constructor_overloading():
     print(person2.name, person2.age)  # Output: Bob 34
 
 '''
+>isinstance
+'''
+def test_isinstance_1():
+    class Animal:
+        def speak(self):
+            pass
+
+    class Dog(Animal):
+        def speak(self):
+            return "Woof"
+
+    class Cat(Animal):
+        def speak(self):
+            return "Meow"
+
+    def check_instance(obj):
+        if isinstance(obj, Dog):
+            return "This is a Dog"
+        elif isinstance(obj, Cat):
+            return "This is a Cat"
+        elif isinstance(obj, Animal):
+            return "This is an Animal"
+        else:
+            return "This is not an Animal"
+
+    dog = Dog()
+    cat = Cat()
+    animal = Animal()
+    number = 42
+
+    print(check_instance(dog))  # Output: This is a Dog
+    print(check_instance(cat))  # Output: This is a Cat
+    print(check_instance(animal))  # Output: This is an Animal
+    print(check_instance(number))  # Output: This is not an Animal
+
+
+'''
 >hasattr
 The hasattr function in Python is used to check if an object has a particular attribute. 
 It takes two arguments: the object and the name of the attribute as a string. 
@@ -4083,6 +4162,36 @@ def test_compile_multiline():
 r'''
 >generators
 '''
+
+def test_generator_debounce():
+    import time
+
+    def debounce(min_interval=1):
+        """
+        Generate infinite sequence which yields every given interval.
+
+        If consumer calls next() after the min_interval has passed then the
+        next value is yielded immediately. Otherwise this generator blocks until
+        the min_interval is reached.
+        """
+        prev_time = -1
+        while True:
+            current_time = time.time()
+            diff_time = current_time - prev_time
+            if diff_time >= min_interval:
+                yield current_time
+                prev_time = current_time
+            else:
+                time.sleep(min_interval - diff_time)
+
+    # Example usage of the debounce generator
+    debounced_generator = debounce(min_interval=2)  # Set a 2-second interval
+
+    for _ in range(5):
+        print(next(debounced_generator))
+        # Simulate some work or processing
+        time.sleep(1)  # Sleep for 1 second to test the debounce functionality
+
 def test_generator_with_loop():
     def count_up_to(max):
         count = 1
@@ -4372,7 +4481,7 @@ def check_ping_ip(shell, ip, interface, number_of_packets):
 """
 
 r"""
->@contextmanager
+>contextmanager
 """
 def test_contextmanager_1():
     from contextlib import contextmanager
@@ -4422,7 +4531,49 @@ def test_contextmanager_2():
     # Example usage:
     db_name = 'example.db'
 
+    import pdb; pdb.set_trace()
+
     with db_connection(db_name) as cursor:
+        cursor.execute('CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY, name TEXT)')
+        cursor.execute('INSERT INTO users (name) VALUES (?)', ('Alice',))
+        cursor.execute('INSERT INTO users (name) VALUES (?)', ('Bob',))
+        cursor.execute('SELECT * FROM users')
+        users = cursor.fetchall()
+        for user in users:
+            print(user)
+
+'''
+Sure, let's look at how we can implement the same functionalities 
+without using the @contextmanager decorator. 
+We'll achieve this by creating custom context manager classes that implement 
+the __enter__ and __exit__ methods.
+'''
+def test_without_contextmanager():
+    import sqlite3
+
+    class DBTransaction:
+        def __init__(self, db_name):
+            self.db_name = db_name
+            self.conn = None
+            self.cursor = None
+
+        def __enter__(self):
+            self.conn = sqlite3.connect(self.db_name)
+            self.cursor = self.conn.cursor()
+            return self.cursor
+
+        def __exit__(self, exc_type, exc_val, exc_tb):
+            if exc_type is None:
+                self.conn.commit()
+            else:
+                self.conn.rollback()
+            self.cursor.close()
+            self.conn.close()
+
+    # Example usage:
+    db_name = 'example.db'
+
+    with DBTransaction(db_name) as cursor:
         cursor.execute('CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY, name TEXT)')
         cursor.execute('INSERT INTO users (name) VALUES (?)', ('Alice',))
         cursor.execute('INSERT INTO users (name) VALUES (?)', ('Bob',))
@@ -4474,6 +4625,36 @@ def test_classmethod_factory_method():
 
     print(book1.title, book1.author)  # Output: 1984 George Orwell
     print(book2.title, book2.author)  # Output: Brave New World Aldous Huxley
+
+'''
+Use @classmethod when you need to access or modify the class state.
+Use @staticmethod when you need a utility function that does not interact
+ with class or instance state but logically belongs to the class.
+'''
+def test_diff_btwn_static_n_class_method():
+    class MyClass:
+        class_variable = 0
+
+        def __init__(self, value):
+            self.instance_variable = value
+
+        @classmethod
+        def set_class_variable(cls, value):
+            cls.class_variable = value
+
+        @staticmethod
+        def static_method_example(arg1, arg2):
+            return arg1 + arg2
+
+    # Using class method
+    MyClass.set_class_variable(10)
+    print(MyClass.class_variable)  # Output: 10
+
+    # Using static method
+    result = MyClass.static_method_example(3, 5)
+    print(result)  # Output: 8
+
+
 
 '''
 >@property - to get
@@ -4608,11 +4789,161 @@ def test_property_deleter():
 
 """
 >decorators
-"""
+A decorator in Python is a design pattern that allows you to modify 
+the behavior of a function or method without changing its code. 
+Decorators are often used to add functionality to functions or methods in a clean, 
+readable, and reusable way. 
 
-r"""
->context manager
+While @functools.wraps is not required for a decorator to function, 
+it is best practice to use it to ensure that the decorated function retains its original metadata. 
+This makes your code more readable, debuggable, and compatible with tools that 
+rely on function introspection.
 """
+def test_decorator_log():
+    def log_decorator(func):
+        # @functools.wraps(func)
+        def wrapper(*args, **kwargs):
+            print(f"Calling function {func.__name__}")
+            result = func(*args, **kwargs)
+            print(f"Function {func.__name__} finished")
+            return result
+
+        return wrapper
+
+    @log_decorator
+    def add(a, b):
+        return a + b
+
+    add(5, 3)
+
+def test_decorator_without_wraps():
+    def my_decorator(func):
+        def wrapper(*args, **kwargs):
+            """This is the docstring of wrapper."""
+            print("Something is happening before the function is called.")
+            result = func(*args, **kwargs)
+            print("Something is happening after the function is called.")
+            return result
+
+        return wrapper
+
+    @my_decorator
+    def say_hello():
+        """This is the docstring of say_hello."""
+        print("Hello!")
+
+    say_hello()
+
+    print(say_hello.__name__)
+    print(say_hello.__doc__)
+
+    # Something is happening before the function is called.
+    # Hello!
+    # Something is happening after the function is called.
+    # wrapper
+    # This is the docstring of wrapper.
+
+def test_decorator_with_wraps():
+    import functools
+
+    def my_decorator(func):
+        @functools.wraps(func)
+        def wrapper(*args, **kwargs):
+            print("Something is happening before the function is called.")
+            result = func(*args, **kwargs)
+            print("Something is happening after the function is called.")
+            return result
+
+        return wrapper
+
+    @my_decorator
+    def say_hello():
+        """This is the docstring of say_hello."""
+        print("Hello!")
+
+    say_hello()
+
+    print(say_hello.__name__)
+    print(say_hello.__doc__)
+
+    # Something is happening before the function is called.
+    # Hello!
+    # Something is happening after the function is called.
+    # say_hello
+    # This is the docstring of say_hello.
+
+
+'''
+>deprecated
+'''
+def test_deprecated():
+    import warnings
+    import functools
+
+    def deprecated(func):
+        """This is a decorator which can be used to mark functions as deprecated.
+        It will result in a warning being emitted when the function is used."""
+
+        @functools.wraps(func)
+        def wrapped_func(*args, **kwargs):
+            warnings.warn(
+                f"{func.__name__} is deprecated and will be removed in a future version",
+                category=DeprecationWarning,
+                stacklevel=2
+            )
+            return func(*args, **kwargs)
+
+        return wrapped_func
+
+    @deprecated
+    def old_function(x, y):
+        return x + y
+
+    def new_function(x, y):
+        return x + y + 10
+
+    # Call the deprecated function
+    result = old_function(3, 4)
+    print(result)  # Output: 7, but also shows a deprecation warning
+
+    # Call the new function
+    result = new_function(3, 4)
+    print(result)  # Output: 17
+
+def test_decorator_retry():
+    import time
+    import functools
+
+    def retry(on_exception=Exception, tries=3, delay=1, backoff=2):
+        def deco_retry(f):
+            @functools.wraps(f)
+            def f_retry(*args, **kwargs):
+                mtries, mdelay = tries, delay
+                while mtries > 1:
+                    try:
+                        return f(*args, **kwargs)
+                    except on_exception as e:
+                        msg = f"{str(e)}, Retrying in {mdelay} seconds..."
+                        print(msg)
+                        time.sleep(mdelay)
+                        mtries -= 1
+                        mdelay *= backoff
+                return f(*args, **kwargs)
+
+            return f_retry
+
+        return deco_retry
+
+    # Example function that will fail a few times before succeeding
+    @retry(on_exception=ValueError, tries=4, delay=2, backoff=1.5)
+    def test_function():
+        print("Attempting to perform an operation...")
+        raise ValueError("An error occurred!")
+
+    # Running the example function
+    test_function()
+
+
 
 """
 >pytest.raises
